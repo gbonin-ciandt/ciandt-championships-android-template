@@ -1,0 +1,80 @@
+package com.ciandt.championships.ui.history
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ciandt.championships.data.Tournament
+import com.ciandt.championships.data.TournamentRepository
+import com.ciandt.championships.data.TournamentStatus
+import com.ciandt.championships.ui.common.OriginBadge
+import com.ciandt.championships.ui.theme.CiandtChampionshipsTheme
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HistoryScreen(viewModel: HistoryViewModel = viewModel()) {
+    val finishedTournaments by viewModel.finishedTournaments.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Histórico") })
+        },
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            OriginBadge()
+            HistoryList(finishedTournaments)
+        }
+    }
+}
+
+@Composable
+private fun HistoryList(tournaments: List<Tournament>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        items(tournaments, key = { it.id }) { tournament ->
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(tournament.name, style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "${tournament.modality} · ${tournament.format.label} · ${tournament.participantCount} participants",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HistoryPreview() {
+    CiandtChampionshipsTheme {
+        Column {
+            OriginBadge()
+            HistoryList(
+                TournamentRepository.getTournaments().filter { it.status == TournamentStatus.FINISHED },
+            )
+        }
+    }
+}

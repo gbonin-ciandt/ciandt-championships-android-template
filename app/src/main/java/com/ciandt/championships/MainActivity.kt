@@ -6,8 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ciandt.championships.ui.theme.CITChampionshipsTheme
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.ciandt.championships.ui.history.HistoryScreen
+import com.ciandt.championships.ui.navigation.Routes
+import com.ciandt.championships.ui.ranking.RankingScreen
+import com.ciandt.championships.ui.theme.CiandtChampionshipsTheme
 import com.ciandt.championships.ui.tournamentlist.TournamentListScreen
 
 class MainActivity : ComponentActivity() {
@@ -15,11 +23,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CITChampionshipsTheme {
+            CiandtChampionshipsTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    TournamentListScreen()
+                    CiandtChampionshipsApp()
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun CiandtChampionshipsApp(navController: NavHostController = rememberNavController()) {
+    NavHost(navController = navController, startDestination = Routes.TOURNAMENT_LIST) {
+        composable(Routes.TOURNAMENT_LIST) {
+            TournamentListScreen(
+                onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
+                onNavigateToRanking = { navController.navigate(Routes.RANKING) },
+            )
+        }
+        composable(Routes.HISTORY) {
+            HistoryScreen()
+        }
+        composable(Routes.RANKING) {
+            RankingScreen()
         }
     }
 }

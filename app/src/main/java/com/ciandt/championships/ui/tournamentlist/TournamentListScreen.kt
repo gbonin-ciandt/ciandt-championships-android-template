@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,11 +30,15 @@ import com.ciandt.championships.data.Tournament
 import com.ciandt.championships.data.TournamentRepository
 import com.ciandt.championships.data.TournamentStatus
 import com.ciandt.championships.ui.common.OriginBadge
-import com.ciandt.championships.ui.theme.CITChampionshipsTheme
+import com.ciandt.championships.ui.theme.CiandtChampionshipsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TournamentListScreen(viewModel: TournamentListViewModel = viewModel()) {
+fun TournamentListScreen(
+    viewModel: TournamentListViewModel = viewModel(),
+    onNavigateToHistory: () -> Unit = {},
+    onNavigateToRanking: () -> Unit = {},
+) {
     val tournaments by viewModel.tournaments.collectAsState()
 
     Scaffold(
@@ -43,6 +48,13 @@ fun TournamentListScreen(viewModel: TournamentListViewModel = viewModel()) {
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             OriginBadge()
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                TextButton(onClick = onNavigateToHistory) { Text("Histórico") }
+                TextButton(onClick = onNavigateToRanking) { Text("Ranking") }
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -101,7 +113,7 @@ private fun StatusBadge(status: TournamentStatus) {
 @Preview(showBackground = true)
 @Composable
 private fun TournamentListPreview() {
-    CITChampionshipsTheme {
+    CiandtChampionshipsTheme {
         Column {
             OriginBadge()
             LazyColumn(

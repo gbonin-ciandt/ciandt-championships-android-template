@@ -6,8 +6,15 @@ Native starting point for **Lab 01 — Brownfield Bootstrap** of the RN Advanced
 
 This is a plain Kotlin + Jetpack Compose Android app — **no React Native yet**. It shows
 a tournament list screen backed by in-memory mock data (soccer, pool, Mortal Kombat,
-FIFA). The lab task is to embed a React Native module into this project without
-breaking the existing native screen.
+FIFA), plus two more native screens (**History** and **Global Ranking**) already wired
+into a Jetpack Navigation Compose graph. The lab task is to embed React Native into this
+project and grow it into new screens without breaking the existing native ones.
+
+This template intentionally ships with **more native screens than Lab 01 touches**.
+The premise of the brownfield trail is that the native app already exists in production
+and React Native is added feature by feature into it — so History and Global Ranking
+are pre-built native destinations the RN screens students build in later labs will
+navigate *into*, exercising the RN → native direction of interop (not just native → RN).
 
 ## Stack
 
@@ -22,10 +29,14 @@ breaking the existing native screen.
 
 ```
 app/src/main/java/com/ciandt/championships/
-  MainActivity.kt
+  MainActivity.kt        NavHost wiring (tournament_list / history / ranking routes)
   data/                  Tournament, TournamentFormat, TournamentStatus, TournamentRepository (mock)
+                         RankingEntry, RankingRepository (mock)
   ui/theme/              Compose Material 3 theme (cyan/purple, matches the course's Lab identity)
+  ui/navigation/         Routes — route constants shared by MainActivity's NavHost
   ui/tournamentlist/     TournamentListScreen + ViewModel — the screen Lab 01 embeds RN alongside
+  ui/history/            HistoryScreen + ViewModel — native, pre-built, lists FINISHED tournaments
+  ui/ranking/            RankingScreen + ViewModel — native, pre-built, global points ranking
 ```
 
 ## Opening in Android Studio
@@ -43,11 +54,21 @@ Every screen carries a small colored banner at the top identifying its origin �
 screens are native and which are React Native:
 
 - **Native (Kotlin/Compose) screens**: green banner, `OriginBadgeColors.Native`
-  (`#14532D`), label `"NATIVE SCREEN"` — already wired into `TournamentListScreen`
+  (`#14532D`), label `"NATIVE SCREEN"` — already wired into `TournamentListScreen`,
+  `HistoryScreen` and `RankingScreen`
 - **React Native screens** (added in Lab 01+): purple, `OriginBadgeColors.ReactNative`
   (`#4C1D95`), label `"REACT NATIVE SCREEN"` — the RN side should render an equivalent
   banner (plain `View`/`Text` with the same color) at the top of every RN screen for
   visual parity with the native one
+
+## Navigation
+
+`MainActivity.kt` hosts a Jetpack Navigation Compose graph (`ui/navigation/Routes.kt`)
+with three destinations today: `tournament_list` (start), `history`, `ranking`. The
+tournament list screen has "Histórico"/"Ranking" text buttons that navigate to the two
+native screens — this is the graph later labs extend: Lab 02's RN Tournament Detail
+screen is added as a new destination reachable by tapping a tournament card, and it in
+turn can navigate forward into the existing native `history`/`ranking` destinations.
 
 ## React Native 0.87 readiness (for Lab 01)
 
@@ -75,13 +96,31 @@ minimum requirements/breaking changes to keep in mind when building that lab:
 
 ## Roadmap (future labs, not yet in this repo)
 
-| Lab | What gets added |
-|---|---|
-| 01 — Brownfield Bootstrap | React Native embedded alongside this native screen |
-| 02 — Brownfield Navigation | Native list → RN "create tournament" → back to native |
-| 03 — Native Library Bridge | TurboModule wrapping a native bracket/Swiss-pairing generator |
-| 04 — UI Thread vs JS Thread | Live standings screen, perf investigation |
-| 05 — Godot Integration (optional) | Victory-celebration mini-game |
+| Lab | What gets added | Criteria |
+|---|---|---|
+| 01 — Brownfield Bootstrap | React Native embedded alongside the native tournament list | Tapping a tournament card opens an RN screen that receives the tournament via props, renders the purple "REACT NATIVE SCREEN" badge, and can navigate back to the native list |
+| 02 — Brownfield Navigation | Real RN **Tournament Detail** screen (bracket/table rendered per `TournamentFormat`) | From the RN detail screen, the student wires forward navigation into the pre-built native `history` and `ranking` destinations — exercising RN → native interop, not just native → RN |
+| 03 — Native Library Bridge | RN **Create Tournament** form calling a native TurboModule | The TurboModule generates real bracket/Swiss pairings (replacing `TournamentRepository`'s hardcoded mocks) and returns them to the RN form |
+| 04 — UI Thread vs JS Thread | **Match score entry** RN screen, reusing the Lab 02 detail screen | Screen ships with a deliberate JS-thread perf problem (janky input/list) the student must diagnose and fix |
+| 05 — Godot Integration (optional) | Victory-celebration mini-game | Triggered after a match/tournament completes; optional stretch lab |
 
-This repo is meant to become a **GitHub template repository** so each student can
-"Use this template" to get their own copy to work from.
+History and Global Ranking are **not** lab deliverables — they exist in this repo today
+as native screens so labs 02+ have real, pre-existing native destinations to bridge into.
+
+## For students
+
+This is a **GitHub template repository** — you don't fork it, and you don't grab a new
+copy for every lab.
+
+1. Click **Use this template** (top of this repo's GitHub page) to create your own copy
+   under your GitHub account.
+2. Clone your copy and open it in Android Studio. Lab 01 starts here, with this native
+   tournament list already working.
+3. Work through Labs 01–05 directly inside your own copy, committing as you complete
+   each one — your commit history becomes your progress log. You never re-template.
+4. Stuck on a lab? This repo (the original template, not your copy) keeps reference
+   solution branches per lab (`lab-02-solution`, `lab-03-solution`, ...) as an answer
+   key. They are **not** copied into your fork automatically — check them here if
+   you need to compare.
+
+See also the `/lab` page on the course site for the full lab descriptions and prerequisites.
