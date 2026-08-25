@@ -11,3 +11,9 @@ app/build/
 .cxx
 gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+
+# React Native (lab-01-solution)
+node_modules/
+.cxx/
+*.jsbundle
+
