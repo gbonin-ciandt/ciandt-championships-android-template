@@ -2,12 +2,21 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.facebook.react")
+}
+
+react {
+    // This app module lives at "<root>/app" (no separate "android/" folder wrapping it, since
+    // RN was embedded into the pre-existing native project), so root is one level up, not two.
+    root = file("../")
+    autolinkLibrariesWithApp()
 }
 
 android {
     namespace = "com.ciandt.championships"
     compileSdk = 37
     buildToolsVersion = "37.0.0"
+    ndkVersion = "27.1.12297006"
 
     defaultConfig {
         applicationId = "com.ciandt.championships"
@@ -38,6 +47,7 @@ android {
 
     buildFeatures {
         compose = true
+        resValues = true
     }
 }
 
@@ -54,4 +64,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
+
+    // React Native (lab-01-solution: brownfield embedding, New Architecture)
+    implementation("com.facebook.react:react-android")
+    implementation("com.facebook.react:hermes-android")
 }

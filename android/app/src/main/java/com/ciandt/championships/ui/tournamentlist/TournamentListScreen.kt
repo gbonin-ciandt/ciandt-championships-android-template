@@ -23,9 +23,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ciandt.championships.TournamentDetailActivity
 import com.ciandt.championships.data.Tournament
 import com.ciandt.championships.data.TournamentRepository
 import com.ciandt.championships.data.TournamentStatus
@@ -71,7 +73,11 @@ fun TournamentListScreen(
 
 @Composable
 private fun TournamentCard(tournament: Tournament) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    val context = LocalContext.current
+    Card(
+        onClick = { context.startActivity(TournamentDetailActivity.newIntent(context, tournament)) },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
