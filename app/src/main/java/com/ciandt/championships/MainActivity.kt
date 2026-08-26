@@ -22,10 +22,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val startDestination = intent.getStringExtra(Routes.EXTRA_START_DESTINATION)
+            ?: Routes.TOURNAMENT_LIST
         setContent {
             CiandtChampionshipsTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    CiandtChampionshipsApp()
+                    CiandtChampionshipsApp(startDestination = startDestination)
                 }
             }
         }
@@ -33,8 +35,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun CiandtChampionshipsApp(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = Routes.TOURNAMENT_LIST) {
+private fun CiandtChampionshipsApp(
+    navController: NavHostController = rememberNavController(),
+    startDestination: String = Routes.TOURNAMENT_LIST,
+) {
+    NavHost(navController = navController, startDestination = startDestination) {
         composable(Routes.TOURNAMENT_LIST) {
             TournamentListScreen(
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
