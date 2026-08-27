@@ -28,7 +28,7 @@ navigate *into*, exercising the RN → native direction of interop (not just nat
 ## Structure
 
 ```
-app/src/main/java/com/ciandt/championships/
+android/app/src/main/java/com/ciandt/championships/
   MainActivity.kt        NavHost wiring (tournament_list / history / ranking routes)
   data/                  Tournament, TournamentFormat, TournamentStatus, TournamentRepository (mock)
                          RankingEntry, RankingRepository (mock)
@@ -41,11 +41,15 @@ app/src/main/java/com/ciandt/championships/
 
 ## Opening in Android Studio
 
+Open the `android/` folder (not the repo root) as the Android Studio project — that's
+where the Gradle project lives, alongside `index.js`/`package.json`/`src/` for the React
+Native side at the repo root.
+
 The Gradle wrapper JAR binary isn't committed to this template (kept out of git history
 on purpose). On first open, Android Studio will detect the missing wrapper and offer to
 generate/use one — accept that prompt, or run `gradle wrapper --gradle-version 9.1.0` once
-if you have a local Gradle install. `gradle/wrapper/gradle-wrapper.properties` already
-pins the version so the regenerated wrapper matches.
+if you have a local Gradle install. `android/gradle/wrapper/gradle-wrapper.properties`
+already pins the version so the regenerated wrapper matches.
 
 ## Native vs React Native screen labeling
 

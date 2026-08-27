@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "android": "react-native run-android"
+    "android": "react-native run-android",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "react": "19.1.4",
@@ -17,7 +18,10 @@
     "@react-native-community/cli-platform-android": "20.0.0",
     "@react-native/babel-preset": "0.81.6",
     "@react-native/metro-config": "0.81.6",
-    "metro-react-native-babel-preset": "0.77.0"
+    "@react-native/typescript-config": "^0.81.6",
+    "@types/react": "^19.2.18",
+    "metro-react-native-babel-preset": "0.77.0",
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=18"

@@ -1,16 +1,16 @@
 *.iml
 .gradle/
-/local.properties
+/android/local.properties
 /.idea/
 .DS_Store
-/build
-app/build/
+/android/build
+android/app/build/
 .kotlin/
 /captures
 .externalNativeBuild
 .cxx
-gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
+android/gradle/wrapper/gradle-wrapper.jar
+!android/gradle/wrapper/gradle-wrapper.properties
 
 # React Native (lab-01-solution)
 node_modules/

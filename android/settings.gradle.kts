@@ -1,5 +1,5 @@
 pluginManagement {
-    includeBuild("node_modules/@react-native/gradle-plugin")
+    includeBuild("../node_modules/@react-native/gradle-plugin")
     repositories {
         google()
         mavenCentral()
@@ -10,10 +10,7 @@ plugins {
     id("com.facebook.react.settings")
 }
 extensions.configure<com.facebook.react.ReactSettingsExtension> {
-    // This settings.gradle.kts lives at the project root (no separate `android/` subfolder,
-    // since RN was embedded into the pre-existing native project), so the working directory
-    // for the autolinking command must be "." rather than the library default of "../".
-    autolinkLibrariesFromCommand(workingDirectory = settings.layout.rootDirectory.asFile)
+    autolinkLibrariesFromCommand()
 }
 dependencyResolutionManagement {
     // PREFER_SETTINGS (not FAIL_ON_PROJECT_REPOS): the com.facebook.react plugin adds its own
@@ -27,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ciandt-championships"
 include(":app")
-includeBuild("node_modules/@react-native/gradle-plugin")
+includeBuild("../node_modules/@react-native/gradle-plugin")
