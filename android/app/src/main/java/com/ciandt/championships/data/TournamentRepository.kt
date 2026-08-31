@@ -1,13 +1,17 @@
 package com.ciandt.championships.data
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 /**
- * In-memory placeholder data. Lab 03 replaces bracket/pairing generation with a native
- * TurboModule; this repository only exists to give the native screens in Lab 01/02 real
- * content to render before React Native is introduced.
+ * In-memory tournament store. Seeded with placeholder data for Lab 01/02's native screens;
+ * Lab 03's TournamentBridge TurboModule appends real tournaments created from RN via
+ * [addTournament].
  */
 object TournamentRepository {
 
-    fun getTournaments(): List<Tournament> = listOf(
+    private val seed = listOf(
         Tournament(
             id = "t1",
             name = "Sinuca Q3 2026",
@@ -41,4 +45,13 @@ object TournamentRepository {
             status = TournamentStatus.FINISHED,
         ),
     )
+
+    private val _tournaments = MutableStateFlow(seed)
+    val tournaments: StateFlow<List<Tournament>> = _tournaments.asStateFlow()
+
+    fun getTournaments(): List<Tournament> = _tournaments.value
+
+    fun addTournament(tournament: Tournament) {
+        _tournaments.value = _tournaments.value + tournament
+    }
 }

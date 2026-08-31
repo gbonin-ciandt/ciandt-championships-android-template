@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -27,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ciandt.championships.CreateTournamentActivity
 import com.ciandt.championships.TournamentDetailActivity
 import com.ciandt.championships.data.Tournament
 import com.ciandt.championships.data.TournamentRepository
@@ -42,10 +47,18 @@ fun TournamentListScreen(
     onNavigateToRanking: () -> Unit = {},
 ) {
     val tournaments by viewModel.tournaments.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("CI&T Championships") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { context.startActivity(CreateTournamentActivity.newIntent(context)) },
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Create tournament")
+            }
         },
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {

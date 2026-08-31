@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import BracketView from '../components/BracketView';
 import NavigationBridge from '../specs/NativeNavigationBridge';
 import { generateBracket } from '../utils/tournamentBracket';
 
@@ -45,16 +46,7 @@ export default function TournamentDetailScreen(props) {
 
         {bracket && (
           <Section title="Bracket">
-            {bracket.rounds.map((round) => (
-              <View key={round.roundLabel} style={styles.round}>
-                <Text style={styles.roundLabel}>{round.roundLabel}</Text>
-                {round.matches.map((match, index) => (
-                  <Text key={index} style={styles.match}>
-                    {match.a} vs {match.b}
-                  </Text>
-                ))}
-              </View>
-            ))}
+            <BracketView bracket={bracket} />
           </Section>
         )}
 
@@ -148,20 +140,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#1C1B1F',
     paddingVertical: 4,
-  },
-  round: {
-    marginBottom: 12,
-  },
-  roundLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#4C1D95',
-    marginBottom: 4,
-  },
-  match: {
-    fontSize: 14,
-    color: '#1C1B1F',
-    paddingVertical: 2,
   },
   navigationButtons: {
     marginTop: 24,
