@@ -22,13 +22,19 @@ navigate *into*, exercising the RN → native direction of interop (not just nat
 - AGP 9.0.0, Gradle 9.1.0
 - `compileSdk`/`buildToolsVersion` 37, `targetSdk` 36 (Android 16), `minSdk` 24
   - `compileSdk` is intentionally one ahead of `targetSdk`: React Native 0.87 (added in Lab 01) requires `compileSdk`/`buildTools` 37, while the app still targets the Android 16 (API 36) runtime
-- Gradle version catalog (`gradle/libs.versions.toml`)
+- Gradle version catalog (`android/gradle/libs.versions.toml`)
 - `gradle.properties` opts out of AGP 9's built-in Kotlin and new DSL (`android.builtInKotlin=false`, `android.newDsl=false`) — matches the flags React Native 0.87+ expects when it's added in Lab 01, so upgrading later shouldn't require touching these
 
 ## Structure
 
+The whole native project lives under `android/` — this is intentional, not an artifact
+of the repo layout. React Native's own tooling (Metro, autolinking, `react-native.config.js`)
+expects the native Android project at `./android` relative to the repo root, with the RN
+JS scaffolding (`package.json`, `index.js`, `src/`, ...) added at the root itself when
+Lab 01 embeds it. Nothing outside `android/` exists yet in this template.
+
 ```
-app/src/main/java/com/ciandt/championships/
+android/app/src/main/java/com/ciandt/championships/
   MainActivity.kt        NavHost wiring (tournament_list / history / ranking routes)
   data/                  Tournament, TournamentFormat, TournamentStatus, TournamentRepository (mock)
                          RankingEntry, RankingRepository (mock)
@@ -41,11 +47,14 @@ app/src/main/java/com/ciandt/championships/
 
 ## Opening in Android Studio
 
+Open the **`android/`** folder itself in Android Studio (not the repo root) — that's the
+actual Gradle project.
+
 The Gradle wrapper JAR binary isn't committed to this template (kept out of git history
 on purpose). On first open, Android Studio will detect the missing wrapper and offer to
 generate/use one — accept that prompt, or run `gradle wrapper --gradle-version 9.1.0` once
-if you have a local Gradle install. `gradle/wrapper/gradle-wrapper.properties` already
-pins the version so the regenerated wrapper matches.
+from inside `android/` if you have a local Gradle install. `android/gradle/wrapper/gradle-wrapper.properties`
+already pins the version so the regenerated wrapper matches.
 
 ## Native vs React Native screen labeling
 
