@@ -1,5 +1,7 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import NavigationBridge from '../specs/NativeNavigationBridge';
+import { generateBracket } from '../utils/tournamentBracket';
 
 // Matches OriginBadgeColors.ReactNative (#4C1D95) from the native OriginBadge.kt,
 // so the banner reads as the RN counterpart of the native green "NATIVE SCREEN" badge.
@@ -10,9 +12,14 @@ export default function TournamentDetailScreen(props) {
     tournamentName,
     modality,
     format,
+    formatKey,
     participantCount,
     status,
   } = props;
+
+  const count = participantCount ?? 0;
+  const participantNames = Array.from({ length: count }, (_, i) => `Player ${i + 1}`);
+  const bracket = generateBracket(formatKey, participantNames);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -21,18 +28,40 @@ export default function TournamentDetailScreen(props) {
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>{tournamentName}</Text>
-        {!!modality && (
-          <DetailRow label="Modality" value={modality} />
-        )}
-        {!!format && (
-          <DetailRow label="Format" value={format} />
-        )}
+        {!!modality && <DetailRow label="Modality" value={modality} />}
+        {!!format && <DetailRow label="Format" value={format} />}
         {participantCount != null && (
           <DetailRow label="Participants" value={String(participantCount)} />
         )}
-        {!!status && (
-          <DetailRow label="Status" value={status} />
+        {!!status && <DetailRow label="Status" value={status} />}
+
+        <Section title="Participants">
+          {participantNames.map((name) => (
+            <Text key={name} style={styles.participantName}>
+              {name}
+            </Text>
+          ))}
+        </Section>
+
+        {bracket && (
+          <Section title="Bracket">
+            {bracket.rounds.map((round) => (
+              <View key={round.roundLabel} style={styles.round}>
+                <Text style={styles.roundLabel}>{round.roundLabel}</Text>
+                {round.matches.map((match, index) => (
+                  <Text key={index} style={styles.match}>
+                    {match.a} vs {match.b}
+                  </Text>
+                ))}
+              </View>
+            ))}
+          </Section>
         )}
+
+        <View style={styles.navigationButtons}>
+          <NavButton label="View History" onPress={() => NavigationBridge.openHistory()} />
+          <NavButton label="View Ranking" onPress={() => NavigationBridge.openRanking()} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -44,6 +73,23 @@ function DetailRow({ label, value }) {
       <Text style={styles.rowLabel}>{label}</Text>
       <Text style={styles.rowValue}>{value}</Text>
     </View>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      {children}
+    </View>
+  );
+}
+
+function NavButton({ label, onPress }) {
+  return (
+    <Pressable style={styles.navButton} onPress={onPress}>
+      <Text style={styles.navButtonText}>{label}</Text>
+    </Pressable>
   );
 }
 
@@ -88,5 +134,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#1C1B1F',
     fontWeight: '600',
+  },
+  section: {
+    marginTop: 24,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1C1B1F',
+    marginBottom: 8,
+  },
+  participantName: {
+    fontSize: 14,
+    color: '#1C1B1F',
+    paddingVertical: 4,
+  },
+  round: {
+    marginBottom: 12,
+  },
+  roundLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#4C1D95',
+    marginBottom: 4,
+  },
+  match: {
+    fontSize: 14,
+    color: '#1C1B1F',
+    paddingVertical: 2,
+  },
+  navigationButtons: {
+    marginTop: 24,
+    gap: 12,
+  },
+  navButton: {
+    backgroundColor: '#4C1D95',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  navButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });

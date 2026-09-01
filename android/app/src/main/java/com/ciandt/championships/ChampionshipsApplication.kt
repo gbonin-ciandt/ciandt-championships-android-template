@@ -1,6 +1,7 @@
 package com.ciandt.championships
 
 import android.app.Application
+import com.ciandt.championships.navigationbridge.NavigationBridgePackage
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -18,7 +19,8 @@ class ChampionshipsApplication : Application(), ReactApplication {
 
     override val reactNativeHost: ReactNativeHost =
         object : DefaultReactNativeHost(this) {
-            override fun getPackages(): List<ReactPackage> = PackageList(this).packages
+            override fun getPackages(): List<ReactPackage> =
+                PackageList(this).packages + NavigationBridgePackage()
 
             override fun getJSMainModuleName(): String = "index"
 
