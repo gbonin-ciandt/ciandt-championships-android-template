@@ -11,3 +11,5 @@ android/app/build/
 .cxx
 android/gradle/wrapper/gradle-wrapper.jar
 !android/gradle/wrapper/gradle-wrapper.properties
+/.claude/
+/add_participant.sh
