@@ -6,9 +6,10 @@ plugins {
 }
 
 react {
-    // This app module lives at "<root>/app" (no separate "android/" folder wrapping it, since
-    // RN was embedded into the pre-existing native project), so root is one level up, not two.
-    root = file("../")
+    // This app module lives at "<root>/android/app" (RN was embedded into the pre-existing
+    // native project, which keeps its android/ wrapper folder), so the JS project root
+    // (where package.json lives) is two levels up, not one.
+    root = file("../../")
     autolinkLibrariesWithApp()
 }
 
