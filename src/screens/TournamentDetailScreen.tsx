@@ -5,7 +5,15 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 // so the banner reads as the RN counterpart of the native green "NATIVE SCREEN" badge.
 const REACT_NATIVE_BANNER_COLOR = '#4C1D95';
 
-export default function TournamentDetailScreen(props) {
+interface TournamentDetailScreenProps {
+  tournamentName?: string;
+  modality?: string;
+  format?: string;
+  participantCount?: number;
+  status?: string;
+}
+
+export default function TournamentDetailScreen(props: TournamentDetailScreenProps) {
   const {
     tournamentName,
     modality,
@@ -38,7 +46,7 @@ export default function TournamentDetailScreen(props) {
   );
 }
 
-function DetailRow({ label, value }) {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.row}>
       <Text style={styles.rowLabel}>{label}</Text>
