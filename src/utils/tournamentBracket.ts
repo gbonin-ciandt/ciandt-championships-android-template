@@ -2,20 +2,34 @@
 // TurboModule that generates brackets for real — this only exists so Lab 02's RN screen
 // has a pairing structure to render, using nothing but the participant count Lab 01 wired up.
 
-function nextPowerOfTwo(n) {
+export interface BracketMatch {
+  a: string;
+  b: string;
+}
+
+export interface BracketRound {
+  roundLabel: string;
+  matches: BracketMatch[];
+}
+
+export interface Bracket {
+  rounds: BracketRound[];
+}
+
+function nextPowerOfTwo(n: number): number {
   let power = 1;
   while (power < n) power *= 2;
   return power;
 }
 
-function singleEliminationRounds(participantNames) {
+function singleEliminationRounds(participantNames: string[]): BracketRound[] {
   const size = nextPowerOfTwo(participantNames.length);
   const padded = [...participantNames];
   while (padded.length < size) padded.push('Bye');
 
-  const rounds = [];
+  const rounds: BracketRound[] = [];
 
-  const firstRoundMatches = [];
+  const firstRoundMatches: BracketMatch[] = [];
   for (let i = 0; i < padded.length; i += 2) {
     firstRoundMatches.push({ a: padded[i], b: padded[i + 1] });
   }
@@ -24,7 +38,7 @@ function singleEliminationRounds(participantNames) {
   let matchesInRound = firstRoundMatches.length / 2;
   let roundNumber = 2;
   while (matchesInRound >= 1) {
-    const matches = [];
+    const matches: BracketMatch[] = [];
     for (let i = 0; i < matchesInRound; i++) {
       matches.push({
         a: `Winner of R${roundNumber - 1}M${i * 2 + 1}`,
@@ -39,8 +53,8 @@ function singleEliminationRounds(participantNames) {
   return rounds;
 }
 
-function swissFirstRound(participantNames) {
-  const matches = [];
+function swissFirstRound(participantNames: string[]): BracketRound[] {
+  const matches: BracketMatch[] = [];
   for (let i = 0; i < participantNames.length; i += 2) {
     matches.push({ a: participantNames[i], b: participantNames[i + 1] ?? 'Bye' });
   }
@@ -49,7 +63,7 @@ function swissFirstRound(participantNames) {
 
 // formatKey is the raw TournamentFormat enum name (SINGLE_ELIMINATION / ROUND_ROBIN / SWISS).
 // Returns { rounds } or null when the format has no bracket to show (round-robin, unknown).
-export function generateBracket(formatKey, participantNames) {
+export function generateBracket(formatKey: string, participantNames: string[]): Bracket | null {
   if (formatKey === 'SINGLE_ELIMINATION') {
     return { rounds: singleEliminationRounds(participantNames) };
   }
