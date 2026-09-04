@@ -8,7 +8,16 @@ import { generateBracket } from '../utils/tournamentBracket';
 // so the banner reads as the RN counterpart of the native green "NATIVE SCREEN" badge.
 const REACT_NATIVE_BANNER_COLOR = '#4C1D95';
 
-export default function TournamentDetailScreen(props) {
+interface TournamentDetailScreenProps {
+  tournamentName?: string;
+  modality?: string;
+  format?: string;
+  formatKey?: string;
+  participantCount?: number;
+  status?: string;
+}
+
+export default function TournamentDetailScreen(props: TournamentDetailScreenProps) {
   const {
     tournamentName,
     modality,
@@ -20,7 +29,7 @@ export default function TournamentDetailScreen(props) {
 
   const count = participantCount ?? 0;
   const participantNames = Array.from({ length: count }, (_, i) => `Player ${i + 1}`);
-  const bracket = generateBracket(formatKey, participantNames);
+  const bracket = generateBracket(formatKey ?? '', participantNames);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -59,7 +68,7 @@ export default function TournamentDetailScreen(props) {
   );
 }
 
-function DetailRow({ label, value }) {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.row}>
       <Text style={styles.rowLabel}>{label}</Text>
@@ -68,7 +77,7 @@ function DetailRow({ label, value }) {
   );
 }
 
-function Section({ title, children }) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -77,7 +86,7 @@ function Section({ title, children }) {
   );
 }
 
-function NavButton({ label, onPress }) {
+function NavButton({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable style={styles.navButton} onPress={onPress}>
       <Text style={styles.navButtonText}>{label}</Text>
