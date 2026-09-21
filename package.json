@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "react": "19.1.4",
@@ -21,6 +22,7 @@
     "@react-native/typescript-config": "^0.81.6",
     "@types/react": "^19.2.18",
     "metro-react-native-babel-preset": "0.77.0",
+    "patch-package": "^8.0.1",
     "typescript": "^7.0.2"
   },
   "engines": {
